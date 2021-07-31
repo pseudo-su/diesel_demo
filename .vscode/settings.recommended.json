@@ -1,0 +1,15 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "askForPassword": false,
+      "password": "1234",
+      "driver": "PostgreSQL",
+      "name": "devstack",
+      "database": "diesel_iam_poc_dev",
+      "username": "root"
+    }
+  ]
+}
