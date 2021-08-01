@@ -92,14 +92,14 @@ fn main() {
 
     // PermissionSets assigned to groups
 
-    add_permission_set_to_group(&connection, manageiam_viewaccess.code.as_str(), sysopsteam.id);
-    add_permission_set_to_group(&connection, manageiam_adminaccess.code.as_str(), sysopsteam_admins.id);
+    add_permission_set_to_group(&connection, manageiam_viewaccess.id, sysopsteam.id);
+    add_permission_set_to_group(&connection, manageiam_adminaccess.id, sysopsteam_admins.id);
 
-    add_permission_set_to_group(&connection, managehubs_viewaccess.code.as_str(), bizopsteam.id);
-    add_permission_set_to_group(&connection, managehubs_adminaccess.code.as_str(), bizopsteam_admins.id);
-    add_permission_set_to_group(&connection, manageiam_viewaccess.code.as_str(), bizopsteam_admins.id);
+    add_permission_set_to_group(&connection, managehubs_viewaccess.id, bizopsteam.id);
+    add_permission_set_to_group(&connection, managehubs_adminaccess.id, bizopsteam_admins.id);
+    add_permission_set_to_group(&connection, manageiam_viewaccess.id, bizopsteam_admins.id);
 
-    add_permission_set_to_group(&connection, managehubs_viewaccess.code.as_str(), financeteam.id);
+    add_permission_set_to_group(&connection, managehubs_viewaccess.id, financeteam.id);
 
     // --- Manage Hubs permissions
 
@@ -108,34 +108,34 @@ fn main() {
       description: Some("Create new hubs"),
     });
 
-    add_permission_to_set(&connection, pcreate_hubs.code.as_str(), managehubs_adminaccess.code.as_str());
+    add_permission_to_set(&connection, pcreate_hubs.id, managehubs_adminaccess.id);
 
     let pviewhubdetails = create_permission(&connection, NewPermission {
       code: "ManageHubs:ViewHubDetails",
       description: Some("View hub details"),
     });
-    add_permission_to_set(&connection, pviewhubdetails.code.as_str(), managehubs_adminaccess.code.as_str());
-    add_permission_to_set(&connection, pviewhubdetails.code.as_str(), managehubs_viewaccess.code.as_str());
+    add_permission_to_set(&connection, pviewhubdetails.id, managehubs_adminaccess.id);
+    add_permission_to_set(&connection, pviewhubdetails.id, managehubs_viewaccess.id);
 
     let psearchhubs = create_permission(&connection, NewPermission {
       code: "ManageHubs:SearchHubs",
       description: Some("Search hubs"),
     });
-    add_permission_to_set(&connection, psearchhubs.code.as_str(), managehubs_adminaccess.code.as_str());
-    add_permission_to_set(&connection, psearchhubs.code.as_str(), managehubs_viewaccess.code.as_str());
+    add_permission_to_set(&connection, psearchhubs.id, managehubs_adminaccess.id);
+    add_permission_to_set(&connection, psearchhubs.id, managehubs_viewaccess.id);
 
     let pupdatehubs = create_permission(&connection, NewPermission {
       code: "ManageHubs:UpdateHubDetails",
       description: Some("Update hub details"),
     });
-    add_permission_to_set(&connection, pupdatehubs.code.as_str(), managehubs_adminaccess.code.as_str());
+    add_permission_to_set(&connection, pupdatehubs.id, managehubs_adminaccess.id);
 
     let pdeletehubs = create_permission(&connection, NewPermission {
       code: "ManageHubs:DeleteHubs",
       description: Some("Delete hubs"),
     });
-    add_permission_to_set(&connection, pdeletehubs.code.as_str(), managehubs_adminaccess.code.as_str());
-    add_permission_to_set(&connection, pdeletehubs.code.as_str(), managehubs_viewaccess.code.as_str());
+    add_permission_to_set(&connection, pdeletehubs.id, managehubs_adminaccess.id);
+    add_permission_to_set(&connection, pdeletehubs.id, managehubs_viewaccess.id);
 
     // --- Manage IAM permissions
 
@@ -144,38 +144,38 @@ fn main() {
       code: "ManageIAM:CreateGroups",
       description: Some("Create IAM user groups"),
     });
-    add_permission_to_set(&connection, pcreateusergroups.code.as_str(), manageiam_adminaccess.code.as_str());
+    add_permission_to_set(&connection, pcreateusergroups.id, manageiam_adminaccess.id);
 
     let psearchgroups = create_permission(&connection, NewPermission {
       code: "ManageIAM:SearchGroups",
       description: Some("Search IAM groups"),
     });
-    add_permission_to_set(&connection, psearchgroups.code.as_str(), manageiam_adminaccess.code.as_str());
-    add_permission_to_set(&connection, psearchgroups.code.as_str(), manageiam_viewaccess.code.as_str());
+    add_permission_to_set(&connection, psearchgroups.id, manageiam_adminaccess.id);
+    add_permission_to_set(&connection, psearchgroups.id, manageiam_viewaccess.id);
 
     let pupdateusergroups = create_permission(&connection, NewPermission {
       code: "ManageIAM:UpdateGroupDetails",
       description: Some("Update IAM group details"),
     });
-    add_permission_to_set(&connection, pupdateusergroups.code.as_str(), manageiam_adminaccess.code.as_str());
+    add_permission_to_set(&connection, pupdateusergroups.id, manageiam_adminaccess.id);
 
     let pdeleteusergroups = create_permission(&connection, NewPermission {
       code: "ManageIAM:DeleteGroups",
       description: Some("Delete IAM user groups"),
     });
-    add_permission_to_set(&connection, pdeleteusergroups.code.as_str(), manageiam_adminaccess.code.as_str());
+    add_permission_to_set(&connection, pdeleteusergroups.id, manageiam_adminaccess.id);
 
     // PermissionSets
     let pcreatepermissionsets = create_permission(&connection, NewPermission {
       code: "ManageIAM:CreatePermissionSets",
       description: Some("Create IAM PermissionSets"),
     });
-    add_permission_to_set(&connection, pcreatepermissionsets.code.as_str(), manageiam_adminaccess.code.as_str());
+    add_permission_to_set(&connection, pcreatepermissionsets.id, manageiam_adminaccess.id);
 
     // Permissions
     let pcreatepermissions = create_permission(&connection, NewPermission {
       code: "ManageIAM:CreatePermissions",
       description: Some("Create IAM Permissions"),
     });
-    add_permission_to_set(&connection, pcreatepermissions.code.as_str(), manageiam_adminaccess.code.as_str());
+    add_permission_to_set(&connection, pcreatepermissions.id, manageiam_adminaccess.id);
 }

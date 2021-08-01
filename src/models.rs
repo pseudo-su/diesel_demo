@@ -77,6 +77,7 @@ pub struct PermissionSetGrant {
 
 #[derive(Debug, Queryable)]
 pub struct PermissionSet {
+    pub id: Uuid,
     pub code: String,
     pub description: Option<String>,
 
@@ -104,6 +105,7 @@ pub struct PermissionSetPermissionAssignment {
 
 #[derive(Debug, Queryable)]
 pub struct Permission {
+    pub id: Uuid,
     pub code: String,
     pub description: Option<String>,
 

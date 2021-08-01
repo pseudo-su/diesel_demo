@@ -11,10 +11,12 @@ CREATE TABLE users (
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
+    deleted_at TIMESTAMP WITH TIME ZONE NULL,
 
-    PRIMARY KEY (id, deleted_at)
+    PRIMARY KEY (id)
 );
+ALTER TABLE users ALTER COLUMN deleted_at DROP NOT NULL;
+
 SELECT diesel_manage_updated_at('users');
 
 CREATE TABLE user_groups (
@@ -24,80 +26,81 @@ CREATE TABLE user_groups (
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
+    deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
-    PRIMARY KEY (id, deleted_at)
+    PRIMARY KEY (id)
 );
 SELECT diesel_manage_updated_at('user_groups');
 
 CREATE TABLE permission_sets (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     code VARCHAR NOT NULL,
     description VARCHAR,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
+    deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
-    PRIMARY KEY (code, deleted_at)
+    PRIMARY KEY (id)
 );
 SELECT diesel_manage_updated_at('permission_sets');
 
 CREATE TABLE permissions (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     code VARCHAR NOT NULL,
     description VARCHAR,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
+    deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
-    PRIMARY KEY (code, deleted_at)
+    PRIMARY KEY (id)
 );
 SELECT diesel_manage_updated_at('permissions');
 
 -- Relations
 
 CREATE TABLE user_group_memberships (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+
     user_id uuid NOT NULL,
-    user_deleted_at TIMESTAMP WITH TIME ZONE,
     user_group_id uuid NOT NULL,
-    user_group_deleted_at TIMESTAMP WITH TIME ZONE,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
 
-    PRIMARY KEY(user_id, user_deleted_at, user_group_id, user_group_deleted_at),
-    FOREIGN KEY (user_id, user_deleted_at) REFERENCES users(id, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (user_group_id, user_group_deleted_at) REFERENCES user_groups(id, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY(id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_group_id) REFERENCES user_groups(id) ON DELETE CASCADE
 );
 SELECT diesel_manage_updated_at('user_group_memberships');
 
 CREATE TABLE permission_set_grants (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+
     user_group_id uuid NOT NULL,
-    user_group_deleted_at TIMESTAMP WITH TIME ZONE,
-    permission_set_code VARCHAR NOT NULL,
-    permission_set_deleted_at TIMESTAMP WITH TIME ZONE,
+    permission_set_id uuid NOT NULL,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
 
-    PRIMARY KEY(user_group_id, user_group_deleted_at, permission_set_code, permission_set_deleted_at),
+    PRIMARY KEY(id),
 
-    FOREIGN KEY (user_group_id, user_group_deleted_at) REFERENCES user_groups(id, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (permission_set_code, permission_set_deleted_at) REFERENCES permission_sets(code, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (user_group_id) REFERENCES user_groups(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_set_id) REFERENCES permission_sets(id) ON DELETE CASCADE
 );
 SELECT diesel_manage_updated_at('permission_set_grants');
 
 CREATE TABLE permission_set_permission_assignments (
-    permission_set_code VARCHAR NOT NULL,
-    permission_set_deleted_at TIMESTAMP WITH TIME ZONE,
-    permission_code VARCHAR NOT NULL,
-    permission_deleted_at TIMESTAMP WITH TIME ZONE,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    permission_set_id uuid NOT NULL,
+    permission_id uuid NOT NULL,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
 
-    PRIMARY KEY(permission_set_code, permission_set_deleted_at, permission_code, permission_deleted_at),
-    FOREIGN KEY (permission_set_code, permission_set_deleted_at) REFERENCES permission_sets(code, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (permission_code, permission_deleted_at) REFERENCES permissions(code, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY(id),
+    FOREIGN KEY (permission_set_id) REFERENCES permission_sets(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
 );
 SELECT diesel_manage_updated_at('permission_set_permission_assignments');

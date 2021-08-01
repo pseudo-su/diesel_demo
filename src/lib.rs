@@ -97,7 +97,7 @@ pub fn add_user_to_group<'a>(conn: &PgConnection, user_id: uuid::Uuid, group_id:
     use schema::user_group_memberships::{columns, table};
 
     diesel::insert_into(table)
-        .values((columns::user_id.eq(user_id), columns::group_id.eq(group_id)))
+        .values((columns::user_id.eq(user_id), columns::user_group_id.eq(group_id)))
         .execute(conn)
         .expect("Error saving assignment");
 }
@@ -109,59 +109,59 @@ pub fn remove_user_from_group(conn: &PgConnection, user_id: uuid::Uuid, group_id
     diesel::delete(
         user_group_memberships
             .filter(columns::user_id.eq(user_id))
-            .filter(columns::group_id.eq(group_id)),
+            .filter(columns::user_group_id.eq(group_id)),
     )
     .execute(conn)
     .expect("Error removing assignment");
 }
 
-pub fn add_permission_set_to_group<'a>(conn: &PgConnection, code: &'a str, group_id: uuid::Uuid) -> () {
+pub fn add_permission_set_to_group<'a>(conn: &PgConnection, set_id: uuid::Uuid, group_id: uuid::Uuid) -> () {
     use schema::permission_set_grants::columns;
     use schema::permission_set_grants::dsl::permission_set_grants;
 
     diesel::insert_into(permission_set_grants)
         .values((
-            columns::permission_set_code.eq(code),
-            columns::group_id.eq(group_id),
+            columns::permission_set_id.eq(set_id),
+            columns::user_group_id.eq(group_id),
         ))
         .execute(conn)
         .expect("Error saving assignment");
 }
 
-pub fn remove_permission_set_from_group<'a>(conn: &PgConnection, permission_set_code: &'a str, group_id: uuid::Uuid) -> () {
+pub fn remove_permission_set_from_group<'a>(conn: &PgConnection, permission_set_id: uuid::Uuid, group_id: uuid::Uuid) -> () {
     use schema::permission_set_grants::columns;
     use schema::permission_set_grants::dsl::permission_set_grants;
 
     diesel::delete(
         permission_set_grants
-            .filter(columns::permission_set_code.eq(permission_set_code))
-            .filter(columns::group_id.eq(group_id)),
+            .filter(columns::permission_set_id.eq(permission_set_id))
+            .filter(columns::user_group_id.eq(group_id)),
     )
     .execute(conn)
     .expect("Error removing assignment");
 }
 
-pub fn add_permission_to_set<'a>(conn: &PgConnection, permission_code: &'a str, set_code: &'a str) -> () {
+pub fn add_permission_to_set<'a>(conn: &PgConnection, permission_id: uuid::Uuid, set_id: uuid::Uuid) -> () {
     use schema::permission_set_permission_assignments::columns;
     use schema::permission_set_permission_assignments::dsl::permission_set_permission_assignments;
 
     diesel::insert_into(permission_set_permission_assignments)
         .values((
-            columns::permission_set_code.eq(set_code),
-            columns::permission_code.eq(permission_code),
+            columns::permission_set_id.eq(set_id),
+            columns::permission_id.eq(permission_id),
         ))
         .execute(conn)
         .expect("Error saving assignment");
 }
 
-pub fn remove_permission_from_set<'a>(conn: &PgConnection, permission_code: &'a str, set_code: &'a str) -> () {
+pub fn remove_permission_from_set<'a>(conn: &PgConnection, permission_id: uuid::Uuid, set_id: uuid::Uuid) -> () {
     use schema::permission_set_permission_assignments::columns;
     use schema::permission_set_permission_assignments::dsl::permission_set_permission_assignments;
 
     diesel::delete(
         permission_set_permission_assignments
-        .filter(columns::permission_set_code.eq(set_code))
-        .filter(columns::permission_code.eq(permission_code)),
+        .filter(columns::permission_set_id.eq(set_id))
+        .filter(columns::permission_id.eq(permission_id)),
     )
     .execute(conn)
     .expect("Error removing assignment");
