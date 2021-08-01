@@ -29,6 +29,18 @@ pub fn establish_connection() -> PgConnection {
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 
+pub fn search_users(conn: &PgConnection) -> Vec<User> {
+
+    use schema::users::dsl::users;
+
+    // Users
+    let user_results = users
+        .load::<User>(conn)
+        .expect("Error loading users");
+
+    user_results
+}
+
 pub fn create_user<'a>(conn: &PgConnection, new_user: NewUser) -> User {
     use schema::users;
 

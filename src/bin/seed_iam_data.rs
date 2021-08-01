@@ -82,12 +82,12 @@ fn main() {
 
     let managehubs_adminaccess = create_permission_set(&connection, NewPermissionSet {
       name: "ManageHubsAdministratorAccess",
-      description: Some("Access to perform business operations administrative functions"),
+      description: Some("Access to perform hub management administrative functions"),
     });
 
     let managehubs_viewaccess = create_permission_set(&connection, NewPermissionSet {
       name: "ManageHubsViewOnlyAccess",
-      description: Some("Access to view business operations information"),
+      description: Some("Access to view hub management information"),
     });
 
     // PermissionSets assigned to groups

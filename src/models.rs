@@ -1,5 +1,8 @@
 use super::schema::{users, groups, permission_sets, permissions};
 use uuid::Uuid;
+use chrono::{DateTime, Utc};
+
+// https://kotiri.com/2018/01/31/postgresql-diesel-rust-types.html
 
 #[derive(Queryable)]
 pub struct User {
@@ -8,6 +11,10 @@ pub struct User {
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub mobile: Option<String>,
+
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Insertable)]
@@ -23,9 +30,9 @@ pub struct NewUser<'a> {
 #[table_name="users"]
 pub struct UpdateUserValues<'a>{
     pub id: Uuid,
-    pub email: &'a str,
-    pub first_name: &'a str,
-    pub last_name: &'a str,
+    pub email: Option<&'a str>,
+    pub first_name: Option<&'a str>,
+    pub last_name: Option<&'a str>,
     pub mobile: Option<&'a str>,
 }
 
@@ -33,6 +40,10 @@ pub struct UpdateUserValues<'a>{
 pub struct UserGroupAssignment {
     pub user_id: Uuid,
     pub group_id: Uuid,
+
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Queryable)]
@@ -40,6 +51,10 @@ pub struct Group {
     pub id: Uuid,
     pub name: String,
     pub description: Option<String>,
+
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Insertable)]
@@ -54,6 +69,10 @@ pub struct NewGroup<'a> {
 pub struct GroupPermissionSetAssignment {
     pub group_id: Uuid,
     pub permission_set_id: Uuid,
+
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Queryable)]
@@ -61,6 +80,10 @@ pub struct PermissionSet {
     pub id: Uuid,
     pub name: String,
     pub description: Option<String>,
+
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Insertable)]
@@ -74,6 +97,10 @@ pub struct NewPermissionSet<'a> {
 pub struct PermissionSetPermissionAssignment {
     pub permission_set_id: Uuid,
     pub permission_id: Uuid,
+
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Queryable)]
@@ -81,6 +108,10 @@ pub struct Permission {
     pub id: Uuid,
     pub name: String,
     pub description: Option<String>,
+
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Insertable)]

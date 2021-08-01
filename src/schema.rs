@@ -2,6 +2,9 @@ table! {
     group_permission_set_assignments (group_id, permission_set_id) {
         group_id -> Uuid,
         permission_set_id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -10,6 +13,9 @@ table! {
         id -> Uuid,
         name -> Varchar,
         description -> Nullable<Varchar>,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -17,6 +23,9 @@ table! {
     permission_set_permission_assignments (permission_set_id, permission_id) {
         permission_set_id -> Uuid,
         permission_id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -25,6 +34,9 @@ table! {
         id -> Uuid,
         name -> Varchar,
         description -> Nullable<Varchar>,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -33,6 +45,9 @@ table! {
         id -> Uuid,
         name -> Varchar,
         description -> Nullable<Varchar>,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -40,6 +55,9 @@ table! {
     user_group_assignments (user_id, group_id) {
         user_id -> Uuid,
         group_id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -50,6 +68,9 @@ table! {
         first_name -> Nullable<Varchar>,
         last_name -> Nullable<Varchar>,
         mobile -> Nullable<Varchar>,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
