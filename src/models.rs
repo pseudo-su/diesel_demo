@@ -1,6 +1,6 @@
-use super::schema::{users, user_groups, permission_sets, permissions};
-use uuid::Uuid;
+use super::schema::{permission_sets, permissions, user_groups, users};
 use chrono::{DateTime, Utc};
+use uuid::Uuid;
 
 // https://kotiri.com/2018/01/31/postgresql-diesel-rust-types.html
 
@@ -18,7 +18,7 @@ pub struct User {
 }
 
 #[derive(Debug, Insertable)]
-#[table_name="users"]
+#[table_name = "users"]
 pub struct NewUser<'a> {
     pub email: &'a str,
     pub first_name: &'a str,
@@ -27,8 +27,8 @@ pub struct NewUser<'a> {
 }
 
 #[derive(Debug, Identifiable, AsChangeset)]
-#[table_name="users"]
-pub struct UpdateUserValues<'a>{
+#[table_name = "users"]
+pub struct UpdateUserValues<'a> {
     pub id: Uuid,
     pub email: Option<&'a str>,
     pub first_name: Option<&'a str>,
@@ -58,12 +58,11 @@ pub struct UserGroup {
 }
 
 #[derive(Debug, Insertable)]
-#[table_name="user_groups"]
+#[table_name = "user_groups"]
 pub struct NewUserGroup<'a> {
     pub name: &'a str,
     pub description: Option<&'a str>,
 }
-
 
 #[derive(Debug, Queryable)]
 pub struct PermissionSetGrant {
@@ -87,7 +86,7 @@ pub struct PermissionSet {
 }
 
 #[derive(Debug, Insertable)]
-#[table_name="permission_sets"]
+#[table_name = "permission_sets"]
 pub struct NewPermissionSet<'a> {
     pub code: &'a str,
     pub description: Option<&'a str>,
@@ -115,7 +114,7 @@ pub struct Permission {
 }
 
 #[derive(Debug, Insertable)]
-#[table_name="permissions"]
+#[table_name = "permissions"]
 pub struct NewPermission<'a> {
     pub code: &'a str,
     pub description: Option<&'a str>,

@@ -6,8 +6,8 @@ This is a test project to create an Identity and Access Management (IAM) impleme
 
 - Users and groups use UUID primary keys.
 - Automatic timestamps for `created_at` and `updated_at`
-- Soft delete on entities by using `deleted_at` fields
-- TODO: [Cascading soft deletes](https://stackoverflow.com/questions/506432/cascading-soft-delete/53046345#53046345) for weak entity tables
+- Soft delete on records by using `deleted_at` columns set to either `NULL` or the timestamp of when it was deleted.
+- [Cascading soft deletes](https://stackoverflow.com/questions/506432/cascading-soft-delete/53046345#53046345) using postgres "inheritance" feature
 
 ## Data model
 
@@ -30,10 +30,10 @@ make devstack.start
 diesel migration run
 
 # Seed DB with data
-cargo run --bin seed_iam_data
+cargo run --bin seed_data_iam
 
 # Update all users names (useful to check automatic update_at field working)
-cargo run --bin seed_update_users
+cargo run --bin seed_data_update_users
 
 # List all tables with data
 cargo run --bin list_all
