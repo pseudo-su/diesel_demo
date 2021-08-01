@@ -15,18 +15,10 @@ There are a set of DB tables that come together to form the basis of the IAM sys
 - Group individual permissions into logical sets so that they can be assigned all at once for common role types
 - Assign all access based on a user's membership to different groups
 
-## Status
+## Wireframes
 
-What is the status, such as proposed, accepted, rejected, deprecated, superseded, etc.?
+![Wireframes](./wireframes.png)
 
-## Context
+## ERD
 
-What is the issue that we're seeing that is motivating this decision or change?
-
-## Decision
-
-What is the change that we're proposing and/or doing?
-
-## Consequences
-
-What becomes easier or more difficult to do because of this change?
+![ERD](./erd.png)
