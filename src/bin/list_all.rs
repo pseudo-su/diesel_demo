@@ -10,7 +10,7 @@ use prettytable::{Table, Row, Cell};
 
 fn print_users_table(users: &Vec<User>) {
     let mut table = Table::new();
-    table.add_row(row!["FIRST_NAME", "LAST_NAME", "EMAIL", "MOBILE", "CREATED_AT", "UPDATED_AT"]);
+    table.add_row(row!["EMAIL", "FIRST_NAME", "LAST_NAME", "MOBILE", "CREATED_AT", "UPDATED_AT"]);
 
     for user in users {
         table.add_row(Row::new(vec![
@@ -27,7 +27,7 @@ fn print_users_table(users: &Vec<User>) {
     table.printstd();
 }
 
-fn print_groups_table(groups: &Vec<Group>) {
+fn print_groups_table(groups: &Vec<UserGroup>) {
     let mut table = Table::new();
     table.add_row(row!["NAME", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"]);
 
@@ -46,12 +46,11 @@ fn print_groups_table(groups: &Vec<Group>) {
 
 fn print_permission_sets_table(permission_sets: &Vec<PermissionSet>) {
     let mut table = Table::new();
-    table.add_row(row!["NAME", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"]);
+    table.add_row(row!["CODE", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"]);
 
     for permission_set in permission_sets {
         table.add_row(Row::new(vec![
-            // Cell::new(format!("{}", permission_set.id).as_str()),
-            Cell::new(permission_set.name.as_str()),
+            Cell::new(permission_set.code.as_str()),
             Cell::new(permission_set.description.clone().unwrap_or("-".to_string()).as_str()),
             Cell::new(permission_set.created_at.to_rfc3339().as_str()),
             Cell::new(permission_set.updated_at.to_rfc3339().as_str()),
@@ -63,12 +62,11 @@ fn print_permission_sets_table(permission_sets: &Vec<PermissionSet>) {
 
 fn print_permissions_table(permissions: &Vec<Permission>) {
     let mut table = Table::new();
-    table.add_row(row!["NAME", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"]);
+    table.add_row(row!["CODE", "DESCRIPTION", "CREATED_AT", "UPDATED_AT"]);
 
     for permission in permissions {
         table.add_row(Row::new(vec![
-            // Cell::new(format!("{}", permission_set.id).as_str()),
-            Cell::new(permission.name.as_str()),
+            Cell::new(permission.code.as_str()),
             Cell::new(permission.description.clone().unwrap_or("-".to_string()).as_str()),
             Cell::new(permission.created_at.to_rfc3339().as_str()),
             Cell::new(permission.updated_at.to_rfc3339().as_str()),
@@ -94,9 +92,9 @@ fn main() {
     print_users_table(&user_results);
 
     // Groups
-    use diesel_iam_poc::schema::groups::dsl::*;
-    let group_results = groups
-        .load::<Group>(&connection)
+    use diesel_iam_poc::schema::user_groups::dsl::*;
+    let group_results = user_groups
+        .load::<UserGroup>(&connection)
         .expect("Error loading groups");
 
     println!("");

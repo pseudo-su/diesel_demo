@@ -12,7 +12,7 @@ fn main() {
     let users = search_users(&connection);
 
     for user in users {
-        let updated_name = user.first_name.map(|s| { s + "- Updated" } );
+        let updated_name = user.first_name.map(|s| { s + " - Updated" } );
         update_user(&connection, UpdateUserValues{
             id: user.id,
             email: None,
@@ -21,6 +21,7 @@ fn main() {
             mobile: None,
         });
     }
+
     // let user1 = create_user(&connection, NewUser {
     //   email: "user1@superlegit.business",
     //   first_name: "Peter",

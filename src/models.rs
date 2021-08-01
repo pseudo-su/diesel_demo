@@ -1,10 +1,10 @@
-use super::schema::{users, groups, permission_sets, permissions};
+use super::schema::{users, user_groups, permission_sets, permissions};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 
 // https://kotiri.com/2018/01/31/postgresql-diesel-rust-types.html
 
-#[derive(Queryable)]
+#[derive(Debug, Queryable)]
 pub struct User {
     pub id: Uuid,
     pub email: String,
@@ -17,7 +17,7 @@ pub struct User {
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Insertable)]
+#[derive(Debug, Insertable)]
 #[table_name="users"]
 pub struct NewUser<'a> {
     pub email: &'a str,
@@ -26,7 +26,7 @@ pub struct NewUser<'a> {
     pub mobile: Option<&'a str>,
 }
 
-#[derive(AsChangeset)]
+#[derive(Debug, Identifiable, AsChangeset)]
 #[table_name="users"]
 pub struct UpdateUserValues<'a>{
     pub id: Uuid,
@@ -36,8 +36,8 @@ pub struct UpdateUserValues<'a>{
     pub mobile: Option<&'a str>,
 }
 
-#[derive(Queryable)]
-pub struct UserGroupAssignment {
+#[derive(Debug, Queryable)]
+pub struct UserGroupMembership {
     pub user_id: Uuid,
     pub group_id: Uuid,
 
@@ -46,8 +46,8 @@ pub struct UserGroupAssignment {
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Queryable)]
-pub struct Group {
+#[derive(Debug, Queryable)]
+pub struct UserGroup {
     pub id: Uuid,
     pub name: String,
     pub description: Option<String>,
@@ -57,28 +57,27 @@ pub struct Group {
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Insertable)]
-#[table_name="groups"]
-pub struct NewGroup<'a> {
+#[derive(Debug, Insertable)]
+#[table_name="user_groups"]
+pub struct NewUserGroup<'a> {
     pub name: &'a str,
     pub description: Option<&'a str>,
 }
 
 
-#[derive(Queryable)]
-pub struct GroupPermissionSetAssignment {
+#[derive(Debug, Queryable)]
+pub struct PermissionSetGrant {
     pub group_id: Uuid,
-    pub permission_set_id: Uuid,
+    pub permission_set_code: String,
 
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Queryable)]
+#[derive(Debug, Queryable)]
 pub struct PermissionSet {
-    pub id: Uuid,
-    pub name: String,
+    pub code: String,
     pub description: Option<String>,
 
     pub created_at: DateTime<Utc>,
@@ -86,27 +85,26 @@ pub struct PermissionSet {
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Insertable)]
+#[derive(Debug, Insertable)]
 #[table_name="permission_sets"]
 pub struct NewPermissionSet<'a> {
-    pub name: &'a str,
+    pub code: &'a str,
     pub description: Option<&'a str>,
 }
 
-#[derive(Queryable)]
+#[derive(Debug, Queryable)]
 pub struct PermissionSetPermissionAssignment {
-    pub permission_set_id: Uuid,
-    pub permission_id: Uuid,
+    pub permission_set_code: String,
+    pub permission_code: String,
 
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Queryable)]
+#[derive(Debug, Queryable)]
 pub struct Permission {
-    pub id: Uuid,
-    pub name: String,
+    pub code: String,
     pub description: Option<String>,
 
     pub created_at: DateTime<Utc>,
@@ -114,9 +112,9 @@ pub struct Permission {
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Insertable)]
+#[derive(Debug, Insertable)]
 #[table_name="permissions"]
 pub struct NewPermission<'a> {
-    pub name: &'a str,
+    pub code: &'a str,
     pub description: Option<&'a str>,
 }
