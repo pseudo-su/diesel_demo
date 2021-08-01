@@ -11,6 +11,10 @@ There are a set of DB tables that come together to form the basis of the IAM sys
 
 ## Goals
 
+- Facilitate fine grained permissions for any action in the system
+- Group individual permissions into logical sets so that they can be assigned all at once for common role types
+- Assign all access based on a user's membership to different groups
+
 ## Status
 
 What is the status, such as proposed, accepted, rejected, deprecated, superseded, etc.?

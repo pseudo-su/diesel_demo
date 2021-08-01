@@ -13,9 +13,9 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, deleted_at)
 );
-SELECT auto_manage_updated_at('users');
+SELECT diesel_manage_updated_at('users');
 
 CREATE TABLE user_groups (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
@@ -26,9 +26,9 @@ CREATE TABLE user_groups (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, deleted_at)
 );
-SELECT auto_manage_updated_at('user_groups');
+SELECT diesel_manage_updated_at('user_groups');
 
 CREATE TABLE permission_sets (
     code VARCHAR NOT NULL,
@@ -38,9 +38,9 @@ CREATE TABLE permission_sets (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE,
 
-    PRIMARY KEY (code)
+    PRIMARY KEY (code, deleted_at)
 );
-SELECT auto_manage_updated_at('permission_sets');
+SELECT diesel_manage_updated_at('permission_sets');
 
 CREATE TABLE permissions (
     code VARCHAR NOT NULL,
@@ -50,50 +50,54 @@ CREATE TABLE permissions (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE,
 
-    PRIMARY KEY (code)
+    PRIMARY KEY (code, deleted_at)
 );
-SELECT auto_manage_updated_at('permissions');
+SELECT diesel_manage_updated_at('permissions');
 
 -- Relations
 
 CREATE TABLE user_group_memberships (
     user_id uuid NOT NULL,
-    group_id uuid NOT NULL,
+    user_deleted_at TIMESTAMP WITH TIME ZONE,
+    user_group_id uuid NOT NULL,
+    user_group_deleted_at TIMESTAMP WITH TIME ZONE,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
 
-    PRIMARY KEY(user_id, group_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES user_groups(id) ON DELETE CASCADE
+    PRIMARY KEY(user_id, user_deleted_at, user_group_id, user_group_deleted_at),
+    FOREIGN KEY (user_id, user_deleted_at) REFERENCES users(id, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_group_id, user_group_deleted_at) REFERENCES user_groups(id, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE
 );
-SELECT auto_manage_updated_at('user_group_memberships');
+SELECT diesel_manage_updated_at('user_group_memberships');
 
 CREATE TABLE permission_set_grants (
-    group_id uuid NOT NULL,
+    user_group_id uuid NOT NULL,
+    user_group_deleted_at TIMESTAMP WITH TIME ZONE,
     permission_set_code VARCHAR NOT NULL,
+    permission_set_deleted_at TIMESTAMP WITH TIME ZONE,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
 
-    PRIMARY KEY(group_id, permission_set_code),
-    FOREIGN KEY (group_id) REFERENCES user_groups(id) ON DELETE CASCADE,
-    FOREIGN KEY (permission_set_code) REFERENCES permission_sets(code) ON DELETE CASCADE
+    PRIMARY KEY(user_group_id, user_group_deleted_at, permission_set_code, permission_set_deleted_at),
+
+    FOREIGN KEY (user_group_id, user_group_deleted_at) REFERENCES user_groups(id, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (permission_set_code, permission_set_deleted_at) REFERENCES permission_sets(code, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE
 );
-SELECT auto_manage_updated_at('permission_set_grants');
+SELECT diesel_manage_updated_at('permission_set_grants');
 
 CREATE TABLE permission_set_permission_assignments (
     permission_set_code VARCHAR NOT NULL,
+    permission_set_deleted_at TIMESTAMP WITH TIME ZONE,
     permission_code VARCHAR NOT NULL,
+    permission_deleted_at TIMESTAMP WITH TIME ZONE,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
 
-    PRIMARY KEY(permission_set_code, permission_code),
-    FOREIGN KEY (permission_set_code) REFERENCES permission_sets(code) ON DELETE CASCADE,
-    FOREIGN KEY (permission_code) REFERENCES permissions(code) ON DELETE CASCADE
+    PRIMARY KEY(permission_set_code, permission_set_deleted_at, permission_code, permission_deleted_at),
+    FOREIGN KEY (permission_set_code, permission_set_deleted_at) REFERENCES permission_sets(code, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (permission_code, permission_deleted_at) REFERENCES permissions(code, deleted_at) ON DELETE CASCADE ON UPDATE CASCADE
 );
-SELECT auto_manage_updated_at('permission_set_permission_assignments');
+SELECT diesel_manage_updated_at('permission_set_permission_assignments');

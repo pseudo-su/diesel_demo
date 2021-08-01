@@ -1,66 +1,69 @@
 table! {
-    permission_set_grants (group_id, permission_set_code) {
-        group_id -> Uuid,
+    permission_set_grants (user_group_id, user_group_deleted_at, permission_set_code, permission_set_deleted_at) {
+        user_group_id -> Uuid,
+        user_group_deleted_at -> Timestamptz,
         permission_set_code -> Varchar,
+        permission_set_deleted_at -> Timestamptz,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
 table! {
-    permission_set_permission_assignments (permission_set_code, permission_code) {
+    permission_set_permission_assignments (permission_set_code, permission_set_deleted_at, permission_code, permission_deleted_at) {
         permission_set_code -> Varchar,
+        permission_set_deleted_at -> Timestamptz,
         permission_code -> Varchar,
+        permission_deleted_at -> Timestamptz,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
 table! {
-    permission_sets (code) {
+    permission_sets (code, deleted_at) {
         code -> Varchar,
         description -> Nullable<Varchar>,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
+        deleted_at -> Timestamptz,
     }
 }
 
 table! {
-    permissions (code) {
+    permissions (code, deleted_at) {
         code -> Varchar,
         description -> Nullable<Varchar>,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
+        deleted_at -> Timestamptz,
     }
 }
 
 table! {
-    user_group_memberships (user_id, group_id) {
+    user_group_memberships (user_id, user_deleted_at, user_group_id, user_group_deleted_at) {
         user_id -> Uuid,
-        group_id -> Uuid,
+        user_deleted_at -> Timestamptz,
+        user_group_id -> Uuid,
+        user_group_deleted_at -> Timestamptz,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
     }
 }
 
 table! {
-    user_groups (id) {
+    user_groups (id, deleted_at) {
         id -> Uuid,
         name -> Varchar,
         description -> Nullable<Varchar>,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
+        deleted_at -> Timestamptz,
     }
 }
 
 table! {
-    users (id) {
+    users (id, deleted_at) {
         id -> Uuid,
         email -> Varchar,
         first_name -> Nullable<Varchar>,
@@ -68,16 +71,9 @@ table! {
         mobile -> Nullable<Varchar>,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
+        deleted_at -> Timestamptz,
     }
 }
-
-joinable!(permission_set_grants -> permission_sets (permission_set_code));
-joinable!(permission_set_grants -> user_groups (group_id));
-joinable!(permission_set_permission_assignments -> permission_sets (permission_set_code));
-joinable!(permission_set_permission_assignments -> permissions (permission_code));
-joinable!(user_group_memberships -> user_groups (group_id));
-joinable!(user_group_memberships -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     permission_set_grants,
