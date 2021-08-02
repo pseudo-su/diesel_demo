@@ -43,7 +43,8 @@ CREATE TABLE permission_sets (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE(code)
 );
 SELECT manage_auto_updated_at('permission_sets');
 SELECT manage_auto_soft_delete('permission_sets');
@@ -57,7 +58,8 @@ CREATE TABLE permissions (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE(code)
 );
 SELECT manage_auto_updated_at('permissions');
 SELECT manage_auto_soft_delete('permissions');
@@ -75,6 +77,7 @@ CREATE TABLE user_group_memberships (
     deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
     PRIMARY KEY(id),
+    UNIQUE(user_id, user_group_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (user_group_id) REFERENCES user_groups(id) ON DELETE CASCADE
 );
@@ -92,7 +95,7 @@ CREATE TABLE permission_set_grants (
     deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
     PRIMARY KEY(id),
-
+    UNIQUE(user_group_id, permission_set_id),
     FOREIGN KEY (user_group_id) REFERENCES user_groups(id) ON DELETE CASCADE,
     FOREIGN KEY (permission_set_id) REFERENCES permission_sets(id) ON DELETE CASCADE
 );
@@ -109,6 +112,7 @@ CREATE TABLE permission_set_permission_assignments (
     deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
 
     PRIMARY KEY(id),
+    UNIQUE(permission_set_id, permission_id),
     FOREIGN KEY (permission_set_id) REFERENCES permission_sets(id) ON DELETE CASCADE,
     FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
 );
