@@ -1,6 +1,8 @@
 /target
 Cargo.lock
 /.env
-/*.session.sql
 /.vscode/settings.json
 .DS_Store
+*.tmp.csv
+*.tmp.json
+*.tmp.sql
