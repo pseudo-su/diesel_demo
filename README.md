@@ -11,7 +11,7 @@ This is a test project to create an Identity and Access Management (IAM) impleme
 
 ## Data model
 
-![Data model](./docs/iam-data-model/erd.jpeg)
+![Data model](./docs/iam-data-model/erd.png)
 
 ## Quick Start
 
