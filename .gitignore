@@ -2,7 +2,10 @@
 Cargo.lock
 /.env
 /.vscode/settings.json
-.DS_Store
+**/.DS_Store
 *.tmp.csv
 *.tmp.json
 *.tmp.sql
+
+# dotenv files
+/.env*.local

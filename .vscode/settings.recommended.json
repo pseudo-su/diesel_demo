@@ -11,5 +11,8 @@
       "database": "diesel_iam_poc_dev",
       "username": "root"
     }
-  ]
+  ],
+  "[rust]": {
+    "editor.formatOnSaveMode": "file"
+  }
 }
